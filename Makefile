@@ -266,6 +266,14 @@ alias: u8
 kr: hu_HU.aff hu_HU.dic u8 
 	@cd kr; make
 
+UNMUNCH=$(shell which hunspell-unmunch 2>/dev/null >/dev/null && echo hunspell-unmunch || echo unmunch)
+
+%.wordlist.ansi: %.dic %.aff
+	$(UNMUNCH) $? >$@ 2>/dev/null
+
+%: %.ansi
+	iconv -f ISO-8859-2 -t UTF-8 $< >$@
+
 # minden komponens kompilálása
 all: ispell myspell
 
